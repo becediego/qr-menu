@@ -208,18 +208,18 @@ Think of the backend as the only place you trust.
 
 ## Step 5 — Build path for the MVP (ordered checklist)
 
-### Phase A — Empty working website
+### Phase A — Empty working website ✅
 
-1. Create GitHub account + repo
-2. Create Next.js app locally
-3. Deploy to Vercel so you have a public URL
-4. Open that URL on your phone (proves deploy works)
+- [x] Create GitHub account + repo
+- [x] Create Next.js app locally
+- [x] Deploy to Vercel so you have a public URL
+- [x] Open that URL on your phone (proves deploy works)
 
-### Phase B — Fake menu page
+### Phase B — Fake menu page ✅
 
-1. Hardcode ~8 menu items in the page
-2. Add cart in the browser (no database yet)
-3. “Place order” button shows an alert with the cart JSON
+- [x] Hardcode ~8 menu items in the page (4 pizzas + 4 drinks)
+- [x] Add cart in the browser (no database yet)
+- [x] “Place order” button shows the cart JSON (on-page confirmation; browser alerts are often blocked in previews)
 
 ### Phase C — Real database
 
