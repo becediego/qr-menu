@@ -2,19 +2,40 @@
 
 QR-code restaurant ordering: customers scan a table QR code, open a mobile menu, and place orders for kitchen/staff.
 
-## Status
+See [PLAN.md](./PLAN.md) for the full MVP plan.
 
-Empty repository scaffold. App code will be added as the MVP is built.
+## Stack
 
-## Planned MVP
+- **Next.js** (App Router) — UI + API routes in one project
+- **TypeScript** + **Tailwind CSS**
+- Later: hosted Postgres (Supabase or Neon), Vercel deploy
 
-- Customer menu + cart (table from QR URL)
-- Order submission (pay at table for v1)
-- Staff order board
-- Simple menu admin
+## Getting started
 
-## Suggested stack (to be confirmed when building)
+```bash
+npm install
+npm run dev
+```
 
-- Next.js (frontend + API)
-- PostgreSQL via Supabase or Neon
-- Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000).
+
+## Scripts
+
+| Command         | Purpose              |
+| --------------- | -------------------- |
+| `npm run dev`   | Local development    |
+| `npm run build` | Production build     |
+| `npm run start` | Run production build |
+| `npm run lint`  | ESLint               |
+
+## Planned routes (from PLAN.md)
+
+| Route            | Purpose                         |
+| ---------------- | ------------------------------- |
+| `/r/demo/t/7`    | Customer menu for table 7       |
+| `/staff/orders`  | Kitchen / waiter order board    |
+| `/admin/menu`    | Simple menu item editor         |
+
+## Current phase
+
+**Phase A** — empty working Next.js site. Next: deploy to Vercel, then Phase B (hardcoded menu + cart).
