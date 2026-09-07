@@ -8,7 +8,8 @@ See [PLAN.md](./PLAN.md) for the full MVP plan.
 
 - **Next.js** (App Router) — UI + API routes in one project
 - **TypeScript** + **Tailwind CSS**
-- Later: hosted Postgres (Supabase or Neon), Vercel deploy
+- **Vercel** — hosting / deploy from GitHub
+- **Supabase** — hosted Postgres (menu from DB; orders next)
 
 ## Getting started
 
@@ -17,7 +18,7 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000), then try the demo menu at [http://localhost:3000/r/demo/t/7](http://localhost:3000/r/demo/t/7).
 
 ## Scripts
 
@@ -28,14 +29,19 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run start` | Run production build |
 | `npm run lint`  | ESLint               |
 
-## Planned routes (from PLAN.md)
+## Routes
 
-| Route            | Purpose                         |
-| ---------------- | ------------------------------- |
-| `/r/demo/t/7`    | Customer menu for table 7       |
-| `/staff/orders`  | Kitchen / waiter order board    |
-| `/admin/menu`    | Simple menu item editor         |
+| Route           | Status                          | Purpose                      |
+| --------------- | ------------------------------- | ---------------------------- |
+| `/`             | Done                            | Project home / phase status  |
+| `/r/demo/t/7`   | Done (Phase C)                  | Customer menu from DB + cart |
+| `/staff/orders` | Planned                         | Kitchen / waiter order board |
+| `/admin/menu`   | Planned                         | Simple menu item editor      |
 
 ## Current phase
 
-**Phase A** — empty working Next.js site. Next: deploy to Vercel, then Phase B (hardcoded menu + cart).
+**Phase A** ✅ — Next.js app on GitHub + Vercel  
+**Phase B** ✅ — Hardcoded menu, in-browser cart, place order shows cart JSON  
+**Phase C** ✅ — Supabase tables + seed data; menu page fetches from DB  
+
+**Next: Phase D** — save orders to the DB and build the staff order board.

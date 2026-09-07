@@ -26,11 +26,18 @@ type PlacedOrder = {
 
 type MenuWithCartProps = {
   restaurant: string;
+  restaurantName?: string;
   table: string;
   menu: MenuCategory[];
 };
 
-export function MenuWithCart({ restaurant, table, menu }: MenuWithCartProps) {
+export function MenuWithCart({
+  restaurant,
+  restaurantName,
+  table,
+  menu,
+}: MenuWithCartProps) {
+  const displayName = restaurantName ?? restaurant;
   const [cart, setCart] = useState<CartLine[]>([]);
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
 
@@ -113,13 +120,14 @@ export function MenuWithCart({ restaurant, table, menu }: MenuWithCartProps) {
       <main className="mx-auto min-h-full w-full max-w-lg bg-zinc-50 px-4 py-8 text-zinc-900">
         <header className="mb-6 border-b border-zinc-200 pb-6">
           <p className="text-sm font-medium tracking-wide text-zinc-500 uppercase">
-            {placedOrder.restaurant} · Table {placedOrder.table}
+            {displayName} · Table {placedOrder.table}
           </p>
           <h1 className="mt-1 text-3xl font-semibold tracking-tight">
             Order placed
           </h1>
           <p className="mt-2 text-base text-zinc-600">
-            Fake submit for Phase B — nothing was sent to a server. Cart JSON:
+            Menu loaded from the database. Order is still local only (Phase D
+            will save it). Cart JSON:
           </p>
         </header>
 
@@ -142,7 +150,7 @@ export function MenuWithCart({ restaurant, table, menu }: MenuWithCartProps) {
     <main className="mx-auto min-h-full w-full max-w-lg bg-zinc-50 px-4 pb-44 pt-8 text-zinc-900">
       <header className="mb-8 border-b border-zinc-200 pb-6">
         <p className="text-sm font-medium tracking-wide text-zinc-500 uppercase">
-          {restaurant}
+          {displayName}
         </p>
         <h1 className="mt-1 text-3xl font-semibold tracking-tight">Menu</h1>
         <p className="mt-2 text-base text-zinc-600">Table {table}</p>

@@ -221,12 +221,12 @@ Think of the backend as the only place you trust.
 - [x] Add cart in the browser (no database yet)
 - [x] “Place order” button shows the cart JSON (on-page confirmation; browser alerts are often blocked in previews)
 
-### Phase C — Real database
+### Phase C — Real database ✅
 
-1. Create Supabase (or Neon) project
-2. Create the tables above
-3. Insert demo restaurant + tables 1–10 + menu rows
-4. Replace hardcoded menu with a DB fetch
+1. [x] Create Supabase (or Neon) project
+2. [x] Create the tables above
+3. [x] Insert demo restaurant + tables 1–10 + menu rows
+4. [x] Replace hardcoded menu with a DB fetch
 
 ### Phase D — Real orders
 
