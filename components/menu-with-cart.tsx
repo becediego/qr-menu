@@ -11,6 +11,7 @@ type CartLine = {
 };
 
 type PlacedOrder = {
+  id: string;
   restaurant: string;
   table: string;
   items: {
@@ -40,6 +41,8 @@ export function MenuWithCart({
   const displayName = restaurantName ?? restaurant;
   const [cart, setCart] = useState<CartLine[]>([]);
   const [placedOrder, setPlacedOrder] = useState<PlacedOrder | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   function addToCart(item: {
     id: string;
@@ -88,34 +91,73 @@ export function MenuWithCart({
     0,
   );
 
-  function placeOrder() {
-    if (cart.length === 0) return;
+  async function placeOrder() {
+    if (cart.length === 0 || isSubmitting) return;
 
-    const order: PlacedOrder = {
-      restaurant,
-      table,
-      items: cart.map((line) => ({
-        id: line.itemId,
-        name: line.name,
-        quantity: line.quantity,
-        unitPriceCents: line.priceCents,
-        lineTotalCents: line.priceCents * line.quantity,
-      })),
-      totalCents,
-      totalFormatted: formatPrice(totalCents),
-    };
+    setIsSubmitting(true);
+    setSubmitError(null);
 
-    setPlacedOrder(order);
-    setCart([]);
+    try {
+      const response = await fetch("/api/orders", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          restaurant,
+          table,
+          items: cart.map((line) => ({
+            id: line.itemId,
+            quantity: line.quantity,
+          })),
+        }),
+      });
+
+      const payload = (await response.json()) as {
+        error?: string;
+        id?: string;
+        table?: number;
+        totalCents?: number;
+        items?: {
+          id: string;
+          name: string;
+          quantity: number;
+          unitPriceCents: number;
+        }[];
+      };
+
+      if (!response.ok || !payload.id || !payload.items || payload.totalCents == null) {
+        throw new Error(payload.error ?? "Order failed. Please try again.");
+      }
+
+      setPlacedOrder({
+        id: payload.id,
+        restaurant,
+        table: String(payload.table ?? table),
+        items: payload.items.map((item) => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          unitPriceCents: item.unitPriceCents,
+          lineTotalCents: item.unitPriceCents * item.quantity,
+        })),
+        totalCents: payload.totalCents,
+        totalFormatted: formatPrice(payload.totalCents),
+      });
+      setCart([]);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Order failed. Please try again.";
+      setSubmitError(message);
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   function startNewOrder() {
     setPlacedOrder(null);
+    setSubmitError(null);
   }
 
   if (placedOrder) {
-    const orderJson = JSON.stringify(placedOrder, null, 2);
-
     return (
       <main className="mx-auto min-h-full w-full max-w-lg bg-zinc-50 px-4 py-8 text-zinc-900">
         <header className="mb-6 border-b border-zinc-200 pb-6">
@@ -126,14 +168,37 @@ export function MenuWithCart({
             Order placed
           </h1>
           <p className="mt-2 text-base text-zinc-600">
-            Menu loaded from the database. Order is still local only (Phase D
-            will save it). Cart JSON:
+            Saved to the kitchen. Show this confirmation if staff asks.
           </p>
         </header>
 
-        <pre className="overflow-x-auto rounded-lg bg-zinc-900 p-4 text-sm leading-relaxed text-zinc-100">
-          {orderJson}
-        </pre>
+        <div className="flex flex-col gap-4">
+          <p className="text-sm text-zinc-500">
+            Order ID{" "}
+            <span className="font-mono text-zinc-800">
+              {placedOrder.id.slice(0, 8)}
+            </span>
+          </p>
+          <ul className="flex flex-col gap-2 text-base">
+            {placedOrder.items.map((item) => (
+              <li
+                key={item.id}
+                className="flex items-center justify-between gap-3"
+              >
+                <span>
+                  {item.quantity}× {item.name}
+                </span>
+                <span className="tabular-nums text-zinc-600">
+                  {formatPrice(item.lineTotalCents)}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 text-base font-semibold">
+            <span>Total</span>
+            <span className="tabular-nums">{placedOrder.totalFormatted}</span>
+          </div>
+        </div>
 
         <button
           type="button"
@@ -255,12 +320,20 @@ export function MenuWithCart({
                 </span>
                 <span className="tabular-nums">{formatPrice(totalCents)}</span>
               </div>
+              {submitError ? (
+                <p className="text-sm text-red-600" role="alert">
+                  {submitError}
+                </p>
+              ) : null}
               <button
                 type="button"
-                onClick={placeOrder}
-                className="flex h-12 w-full items-center justify-center rounded-lg bg-zinc-900 text-base font-medium text-white"
+                onClick={() => {
+                  void placeOrder();
+                }}
+                disabled={isSubmitting}
+                className="flex h-12 w-full items-center justify-center rounded-lg bg-zinc-900 text-base font-medium text-white disabled:bg-zinc-400"
               >
-                Place order
+                {isSubmitting ? "Placing order…" : "Place order"}
               </button>
             </div>
           )}

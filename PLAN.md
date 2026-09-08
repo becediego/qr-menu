@@ -230,7 +230,7 @@ Think of the backend as the only place you trust.
 
 ### Phase D — Real orders
 
-1. `POST` order writes to `orders` + `order_items`
+1. [x] `POST` order writes to `orders` + `order_items`
 2. Build staff page that reads open orders
 3. Add buttons: Accept → Ready → Served
 

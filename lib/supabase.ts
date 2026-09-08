@@ -8,7 +8,7 @@ export function getSupabase(): SupabaseClient {
 
   if (!url || !anonKey) {
     throw new Error(
-      "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local",
+      "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY. Add them in Vercel → Project Settings → Environment Variables (and keep them in .env.local for local dev).",
     );
   }
 
